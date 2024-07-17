@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
-
+import {useTenant} from '../tenantContext.js'
 const AddProperty = () => {
+  const {setDiscription}= useTenant();
   const [image, setImage] = useState(null);
   const [landl_name, setLandName] = useState('');
   const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
   const [address, setAddress] = useState('');
   const [price, setPrice] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [rooms, setRooms] = useState('');
+  const [area, setArea] = useState('');
+  const [resources, setResources] = useState('');
+  const [amenities, setAmenities] = useState('');
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
@@ -25,26 +29,42 @@ const AddProperty = () => {
     formData.append('landl_name', landl_name);
     formData.append('image', image);
     formData.append('name', name);
-    formData.append('description', description);
     formData.append('address', address);
     formData.append('price', price);
+    formData.append('rooms', rooms);
+    formData.append('amenities', amenities);
+    formData.append('area', area);
+    formData.append('resources', resources);
 
     try {
+      const description = await fetch('http://localhost:4000/description', {
+        method: 'POST',
+        body: formData,
+      });
+      // console.log(await description.json());
+      const dis = await description.json();
+
+      formData.append('description', dis.message);
+
       const response = await fetch('http://localhost:4000/properties/add', {
         method: 'POST',
         body: formData,
       });
+      console.log(await response.json());
 
       if (!response.ok) {
         throw new Error('Failed to add property');
       }
 
       alert('Property added successfully');
-      setLandName('');
-      setDescription('');
-      setAddress('');
-      setPrice('');
-      setImage(null);
+      // setLandName('');
+      // setAddress('');
+      // setPrice('');
+      // setRooms('');
+      // setAmenities('');
+      // setResources('');
+      // setArea('');
+      // setImage(null);
       document.getElementById('image-preview').style.display = 'none'; 
 
     } catch (error) {
@@ -64,15 +84,11 @@ const AddProperty = () => {
         </div>
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700"> Your Name:</label>
-          <input type="text" id="name" name="name" value={landl_name} onChange={(e) => setLandName(e.target.value)} className="mt-1 block w-full p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+          <input type="text" id="landl_name" name="landl_name" value={landl_name} onChange={(e) => setLandName(e.target.value)} className="mt-1 block w-full p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
         </div>
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700">Property Name:</label>
           <input type="text" id="name" name="name" value={name} onChange={(e) => setName(e.target.value)} className="mt-1 block w-full p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-        </div>
-        <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description:</label>
-          <textarea id="description" name="description" value={description} onChange={(e) => setDescription(e.target.value)} className="mt-1 block w-full p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
         </div>
         <div>
           <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address:</label>
@@ -81,6 +97,22 @@ const AddProperty = () => {
         <div>
           <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price:</label>
           <input type="number" id="price" name="price" value={price} onChange={(e) => setPrice(e.target.value)} className="mt-1 block w-full p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+        </div>
+        <div>
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700">No. of Rooms:</label>
+          <input type="number" id="rooms" name="rooms" value={rooms} onChange={(e) => setRooms(e.target.value)} className="mt-1 block w-full p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+        </div>
+        <div>
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700">Amenities:</label>
+          <input type="text" id="amenities" name="amenities" value={amenities} onChange={(e) => setAmenities(e.target.value)} className="mt-1 block w-full p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+        </div>
+        <div>
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700">Area:</label>
+          <input type="number" id="area" name="area" value={area} onChange={(e) => setArea(e.target.value)} className="mt-1 block w-full p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+        </div>
+        <div>
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700">Resources available:</label>
+          <input type="text" id="resources" name="resources" value={resources} onChange={(e) => setResources(e.target.value)} className="mt-1 block w-full p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
         </div>
         <div>
           <button type="submit" className="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-md hover:bg-indigo-900 hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">Add Property</button>

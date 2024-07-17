@@ -7,7 +7,22 @@ const PropertySchema = new mongoose.Schema({
   },
   description: {
     type: String,
+  },
+  price:{
+    type: Number,
+    required: true
+  },
+  amenities:{
+    type: String,
     required: true,
+  },
+  resources:{
+    type: String,
+    required: true,
+  },
+  area:{
+    type: Number,
+    required: true
   },
   landl_name: {
     type: String,

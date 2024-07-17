@@ -8,6 +8,12 @@ const Property = require('./models/Property');
 const multer = require('multer');
 const path = require('path');
 const app = express();
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
+//const geminiApiKey = env.GEMINI_API_KEY; // Access the Gemini API key
+const genAI = new GoogleGenerativeAI("AIzaSyC9faQH1XUjuDs3xMb0U0AaEZVKl5SSLQY");
+
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 const PORT = process.env.PORT || 4000;
@@ -263,13 +269,17 @@ module.exports = upload;
 // Add property route
 app.post('/properties/add', upload.single('image'), async (req, res) => {
     try {
-        const { name, description, address, price, landl_name } = req.body;
+        const { name, amenities, rooms, resources, area, address, price, landl_name,description } = req.body;
         const image = req.file ? `/uploads/${req.file.filename}` : '';
 
         const newProperty = new Property({
             image,
             name,
+            amenities,
+            rooms,
+            resources,
             description,
+            area,
             address,
             price,
             landl_name,
@@ -283,6 +293,25 @@ app.post('/properties/add', upload.single('image'), async (req, res) => {
         console.error(error);
         res.status(500).send('Server Error');
     }
+});
+
+//AI integration
+app.post('/description', async (req, res)=>{
+    try{
+    console.log(req.body);
+    const {address, rooms, area, amenities, resources, price}= req.body;
+    const prompt = `Write a description for the house with the following parameters: location-${address},area-${area},bedrooms-${rooms},amenities-${amenities},resources-${resources},price-${price}`;
+    const result = await model.generateContent(prompt);
+    const response = result.response;
+    const text = response.text();
+    console.log(text);
+
+    res.status(200).json({ message:text });
+} catch (error) {
+    console.error(error);
+    res.status(500).send('Server Error');
+}
+
 });
 
 
@@ -335,9 +364,15 @@ app.delete('/properties/:id', async (req, res) => {
     }
 });
 
+
+
 app.use(express.static(path.join(__dirname, 'public')));
+
+const payment=require('./routs/paymentroute.js');
+app.use('/payment',payment);
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
 
