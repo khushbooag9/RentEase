@@ -1,0 +1,76 @@
+.app_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    min-height: 100vh;
+    padding-bottom: 70 px;
+    margin-top: 20px;
+    
+}
+.app_container form{
+    padding:20px;
+    width:700px;
+    background: #EDE8F5;
+    box-shadow: 0 5px 10px rgba(0,0,0,.1);
+}
+
+
+.app_container form .row .col{
+    flex:1 1 250px;
+}
+
+.app_container form  .title{
+    font-size: 28px;
+    font-weight: 500;
+    text-align: center;
+    justify-content: center;
+    padding-bottom: 5px;
+
+}
+.app_container form  .inputBox{
+    margin: 15px 0;
+}
+.app_container form .inputBox span{
+    margin-bottom: 10px;
+    display: block;
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.app_container form .row .col .inputBox  input{
+    width: 100%;
+    border: 1px solid #ccc;
+    padding:10px 15px;
+    font-size: 15px;
+    text-transform: none;
+}
+.app_container form .row .col .inputBox  input:focus{
+    border: 1px solid #000;
+}
+.app_container form .flex{
+    display: flex;
+    gap:15px;
+}
+.app_container form  .flex .inputBox{
+    margin-top: 5px;
+}
+.submit-btn{
+    font-size: 20px;
+    text-align: center;
+    padding-bottom: 5px;
+    padding: 6px;
+    text-transform: uppercase;
+    border: 1px solid;
+    background-color: rgb(178, 178, 235);
+    margin-left: 260px;
+}
+
+.submit-btn :hover{
+        background-color: #3D52A0;
+        color: white;
+        border: 2px solid white;
+        border-radius: 5px;
+        transition: 0.2s ease-out;
+        cursor: pointer;
+}

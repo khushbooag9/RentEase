@@ -1,0 +1,18 @@
+
+.payment_container form .row .col .inputBox img{
+    height: 42px;
+    border: 0.5px solid ;
+    border-color: rgb(202, 199, 199);
+    border-radius: 2%;
+}
+.payment_container .row .col .title{
+    margin-right: 37px;
+} 
+.payment_container .row .col .pay_title{
+    margin-right: 143px;
+} 
+.app_container form .btn{
+    margin-left: 230px;
+    margin-top: 10px;
+    margin-bottom: 4px;
+}
