@@ -10,7 +10,7 @@ export default function ProfileMenu() {
                     <div className='px-4 py-2'>
                         <h3>{tenant ? tenant.name : 'Guest'}</h3>
                     </div>
-                    <Link to="/TenantProfile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                    <Link to="/UserProfile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
                         Profile
                     </Link>
                     <Link to="/Appointment" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">

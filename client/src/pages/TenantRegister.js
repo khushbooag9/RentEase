@@ -18,7 +18,7 @@ export default function TenantRegister(){
             return;
         }
         try{
-            await axios.post('/TenantRegister',{
+            await axios.post('https:/localhost:4000/TenantRegister',{
                 name, email, password, address, phone_no,
             });
             alert('Registration successful. Now you can login.');
