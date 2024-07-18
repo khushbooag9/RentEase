@@ -64,7 +64,7 @@ export default function TenantPage() {
 
             <SearchBar onSearch={handleSearch} />
 
-            <div className="flex flex-wrap gap-4 w-full p-4 ">
+            <div className="flex flex-wrap gap-4 w-full p-4 cursor-pointer">
                 {noPropertiesMessage && (
                     <div className="w-full text-center text-red-500 text-lg font-semibold">
                         {noPropertiesMessage}
@@ -73,8 +73,8 @@ export default function TenantPage() {
                 {filteredProperties.length > 0 && filteredProperties.map(property => (
                     <div
                         key={property._id}
-                        className="h-96 w-80 bg-white rounded-md mt-14 ml-8 cursor-pointer"
-                        onClick={() => handleCardClick(property._id)}
+                        className="h-96 w-80 bg-white rounded-md mt-14 ml-8"
+                        onClick={() => handleCardClick(property._id) }
                     >
                         <div className="p-1 w-full">
                             {property.image && (

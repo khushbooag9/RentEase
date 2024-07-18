@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import {useTenant} from '../tenantContext.js'
+import axios from 'axios';
 const AddProperty = () => {
-  const {setDiscription}= useTenant();
+  const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
   const [landl_name, setLandName] = useState('');
   const [name, setName] = useState('');
@@ -23,6 +23,33 @@ const AddProperty = () => {
     reader.readAsDataURL(e.target.files[0]);
   };
 
+  const generateDescription = async (e) => {
+    e.preventDefault();
+
+    
+    // const formData = new FormData();
+    // formData.append('landl_name', landl_name);
+    // formData.append('image', image);
+    // formData.append('name', name);
+    // formData.append('address', address);
+    // formData.append('price', price);
+    // formData.append('rooms', rooms);
+    // formData.append('amenities', amenities);
+    // formData.append('area', area);
+    // formData.append('resources', resources);
+
+    try {
+      console.log(landl_name, name, address, price, rooms, amenities, area, resources);
+      const description = await axios.post('http://localhost:4000/description', {
+        address, rooms, area, amenities, resources, price
+      })
+      // console.log(await description.json());
+      setDescription(description.data.message);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -35,16 +62,12 @@ const AddProperty = () => {
     formData.append('amenities', amenities);
     formData.append('area', area);
     formData.append('resources', resources);
+    formData.append('description', description);
 
     try {
-      const description = await fetch('http://localhost:4000/description', {
-        method: 'POST',
-        body: formData,
-      });
-      // console.log(await description.json());
-      const dis = await description.json();
+      
 
-      formData.append('description', dis.message);
+      
 
       const response = await fetch('http://localhost:4000/properties/add', {
         method: 'POST',
@@ -76,7 +99,7 @@ const AddProperty = () => {
   return (
     <div className="max-w-2xl mt-5 mb-8 mx-auto p-6 bg-white shadow-md rounded-md">
       <h2 className="text-2xl font-bold mb-4">Add New Property</h2>
-      <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4">
+      <form encType="multipart/form-data" className="space-y-4">
         <div>
           <label htmlFor="image" className="block text-sm font-medium text-gray-700">Image:</label>
           <input type="file" id="image" name="image" accept="image/*" onChange={handleImageChange} className="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" />
@@ -115,7 +138,17 @@ const AddProperty = () => {
           <input type="text" id="resources" name="resources" value={resources} onChange={(e) => setResources(e.target.value)} className="mt-1 block w-full p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
         </div>
         <div>
-          <button type="submit" className="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-md hover:bg-indigo-900 hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">Add Property</button>
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700">Description:</label>
+          <textarea type="text" id="description" name="description" value={description} onChange={(e) => setDescription(e.target.value)} className="mt-1 block w-full p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+        </div>
+        <div className='flex gap-60'>
+          
+        <div>
+          <button className=" bg-indigo-600 text-white font-bold py-2 px-4 rounded-md hover:bg-indigo-900 hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50" onClick={(e) => generateDescription(e)}>Generate Description</button>
+        </div>
+        <div>
+          <button className=" bg-indigo-600 text-white font-bold py-2 px-4 rounded-md hover:bg-indigo-900 hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50" onClick={(e) => handleSubmit(e)}>Add Property</button>
+        </div>
         </div>
       </form>
     </div>

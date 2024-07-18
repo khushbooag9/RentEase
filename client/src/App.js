@@ -16,6 +16,7 @@ import Feedback from './pages/Feedback.js';
 import Contact from './pages/Contact.js';
 import About from './pages/About.js';
 import PropertyDetails from './pages/PropertyDetails';
+import L_PropertyDetails from './pages/L_PropertyDetails.js';
 import LandlordPage from './pages/LandlordPage.js';
 import Feature from './pages/Feature.js';
 import AddProperty from './pages/AddProperty.js';
@@ -48,6 +49,7 @@ function App() {
             <Route path="/About" element={<About />} />
             <Route path="/Feature" element={<Feature />} />
             <Route path="/property/:id" element={<PropertyDetails />} />
+            <Route path="/l_property/:id" element={<L_PropertyDetails />} />
 
             <Route path="/LandlordPage" element={<LandlordPage />} />
             <Route path="/AddProperty" element={<AddProperty />} />

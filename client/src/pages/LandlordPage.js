@@ -14,6 +14,10 @@ const LandlordPage = ({ children }) => {
     setIsProfileMenuOpen(prevState => !prevState);
   };
 
+  const handleCardClick = (propertyId) => {
+    navigate(`/l_property/${propertyId}`);
+};
+
   React.useEffect(() => {
     const fetchProperties = async () => {
         try {
@@ -69,9 +73,9 @@ const LandlordPage = ({ children }) => {
             <p className="text-center col-span-full">No properties found.</p>
           ) : (
             properties.map(property => (
-              <div key={property.id} className="property-card bg-white shadow-md rounded-lg overflow-hidden">
-                <img src={`http://localhost:4000${property.image}`} alt={property.name} className="property-image p-1 w-full h-72 object-cover" />
-                <div className="property-details p-3 pt-2">
+              <div key={property.id}  className="property-card bg-white shadow-md rounded-lg overflow-hidden">
+                <img src={`http://localhost:4000${property.image}`} alt={property.name} className="property-image p-1 w-full h-72 object-cover" onClick={() => handleCardClick(property._id)}/>
+                <div className="property-details p-3 pt-2 " onClick={() => handleCardClick(property._id)}>
                   <h3 className="property-name text-lg font-bold">{property.name}</h3>
                   <p className="property-location text-gray-600 font-semibold">{property.address}</p>
                   <p className="property-price text-gray-600 font-semibold">₹{property.price}/-</p>

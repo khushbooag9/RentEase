@@ -216,8 +216,31 @@ app.get('/properties', async (req, res) => {
 });
 
 
-// Fetch a single property by ID
+// Fetch a single property by tenant ID
 app.get('/properties/:id', async (req, res) => {
+    try {
+        const property = await Property.findById(req.params.id).lean();
+        if (!property) {
+            return res.status(404).send('Property not found');
+        }
+        const safeProperty = {
+            image: property.image,
+            description: property.description,
+            address: property.address,
+            price: property.price,
+            name: property.name,
+            date_added: property.date_added,
+            _id: property._id.toString()
+        };
+        res.json(safeProperty);
+    } catch (error) {
+        console.error('Error fetching property:', error);
+        res.status(500).send('Server Error');
+    }
+});
+
+// Fetch a single property by landlord ID
+app.get('/l_properties/:id', async (req, res) => {
     try {
         const property = await Property.findById(req.params.id).lean();
         if (!property) {
@@ -298,9 +321,10 @@ app.post('/properties/add', upload.single('image'), async (req, res) => {
 //AI integration
 app.post('/description', async (req, res)=>{
     try{
-    console.log(req.body);
-    const {address, rooms, area, amenities, resources, price}= req.body;
-    const prompt = `Write a description for the house with the following parameters: location-${address},area-${area},bedrooms-${rooms},amenities-${amenities},resources-${resources},price-${price}`;
+    
+    const { address, rooms, area, amenities, resources, price } = req.body;
+    console.log(address, rooms, area, amenities, resources, price);
+    const prompt = `Generate a description for a house located in ${address} with an area of approximately ${area} square feet. It features ${rooms} bedrooms and includes amenities like ${amenities}. Additionally, the house is situated near convenient resources such as ${resources}. All of this is available for the price of ${price}.Don'tadd any special characters and guve proper spacing with alignment`;
     const result = await model.generateContent(prompt);
     const response = result.response;
     const text = response.text();
@@ -363,8 +387,6 @@ app.delete('/properties/:id', async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
-
-
 
 app.use(express.static(path.join(__dirname, 'public')));
 
